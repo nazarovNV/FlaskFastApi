@@ -11,7 +11,7 @@ data = [
 # Главная страница
 @app.route('/')
 def index():
-    return jsonify({"message": "Welcome to the API!"})
+    return jsonify({"message": "Люплю типя, люплю типя"})
 
 # Получение всех элементов
 @app.route('/items', methods=['GET'])
