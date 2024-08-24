@@ -1,36 +1,19 @@
-from flask import Flask, jsonify, request
+from flask import Flask
+from flask_migrate import Migrate
+from flask_jwt_extended import JWTManager
+from models import db, bcrypt
+from routes import routes
+from config import Config
 
-app = Flask(__name__)
+def create_app():
+    app = Flask(__name__)
+    app.config.from_object(Config)
 
-# Пример данных
-data = [
-    {"id": 1, "name": "Item 1"},
-    {"id": 2, "name": "Item 2"},
-]
+    db.init_app(app)
+    bcrypt.init_app(app)
+    Migrate(app, db)
+    JWTManager(app)
 
-# Главная страница
-@app.route('/')
-def index():
-    return jsonify({"message": "Люплю типя, люплю типя"})
+    app.register_blueprint(routes)
 
-# Получение всех элементов
-@app.route('/items', methods=['GET'])
-def get_items():
-    return jsonify(data)
-
-# Получение элемента по ID
-@app.route('/items/<int:item_id>', methods=['GET'])
-def get_item(item_id):
-    item = next((item for item in data if item["id"] == item_id), None)
-    return jsonify(item) if item else jsonify({"error": "Item not found"}), 404
-
-# Добавление нового элемента
-@app.route('/items', methods=['POST'])
-def add_item():
-    new_item = request.json
-    new_item['id'] = len(data) + 1
-    data.append(new_item)
-    return jsonify(new_item), 201
-
-if __name__ == '__main__':
-    app.run(debug=True)
+    return app
