@@ -42,7 +42,14 @@ def login():
 def get_products():
     current_user_id = get_jwt_identity()
     products = Product.query.filter_by(user_id=current_user_id).all()
-    return jsonify([product.name for product in products]), 200
+    return jsonify([{
+        "id": product.id,
+        "name": product.name,
+        "description": product.description,
+        "price": product.price,
+        "image_url": product.image_url,
+        "category": product.category
+    } for product in products]), 200
 
 @routes.route('/products', methods=['POST'])
 @jwt_required()
