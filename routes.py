@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request, current_app
+from flask import Blueprint, jsonify, request
 from models import db, User, Product
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 import datetime
@@ -16,7 +16,7 @@ def register():
         return jsonify({'message': 'User with this email already exists'}), 400
 
     user = User(username=username, email=email)
-    user.set_password(password)
+    user.password = password  # Используем свойство для установки пароля
 
     db.session.add(user)
     db.session.commit()
@@ -31,7 +31,7 @@ def login():
 
     user = User.query.filter_by(email=email).first()
 
-    if user and user.check_password(password):
+    if user and user.verify_password(password):  # Используем метод для проверки пароля
         access_token = create_access_token(identity=user.id, expires_delta=datetime.timedelta(days=1))
         return jsonify({'access_token': access_token}), 200
 
@@ -49,15 +49,30 @@ def get_products():
 def add_product():
     current_user_id = get_jwt_identity()
     data = request.get_json()
+
     name = data.get('name')
     description = data.get('description')
     price = data.get('price')
+    category = data.get('category')  # обязательный параметр
+    image_url = data.get('image_url')  # не обязательный параметр
 
-    product = Product(name=name, description=description, price=price, user_id=current_user_id)
+    if not name or not description or not price or not category:
+        return jsonify({"message": "Missing required fields"}), 400
+
+    product = Product(
+        name=name,
+        description=description,
+        price=price,
+        category=category,
+        image_url=image_url,
+        user_id=current_user_id
+    )
+
     db.session.add(product)
     db.session.commit()
 
     return jsonify({'message': 'Product added successfully'}), 201
+
 
 @routes.route('/account', methods=['GET', 'PUT'])
 @jwt_required()
