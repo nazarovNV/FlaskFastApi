@@ -2,13 +2,13 @@
 
 ### Моё api для выпускного проекта Android Kotlin: Приложение для продавцов на маркетплейсе
 
-## Описание проекта
+### Описание проекта
 Это простое api для моего проекта. Тут есть простые методы для получения и доабвления товаров, авторизации, регистрации
-# Получение товаров (нужен jwt токен)
+#### Получение товаров (нужен jwt токен)
 curl --location --globoff '{{URL}}/products' \
 --header 'Authorization: {{access_token}}' \
 --data ''
-# Добавление товаров (нужен jwt токен)
+#### Добавление товаров (нужен jwt токен)
 curl --location --globoff '{{URL}}/products' \
 --header 'Authorization: {{access_token}}' \
 --header 'Content-Type: application/json' \
@@ -19,7 +19,7 @@ curl --location --globoff '{{URL}}/products' \
 
   "image_url": "https://s.iimg.su/s/03/5rLrMmWJhJy1GD0iZtMMTw1zkLzuZyYP7D5WW7uu.png"
 }'
-# Регистрация
+#### Регистрация
 curl --location --globoff '{{URL}}/register' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -27,7 +27,7 @@ curl --location --globoff '{{URL}}/register' \
     "password": "5",
     "email": "521@mail.ru"
 }'
-# Логин
+#### Логин
 curl --location --globoff '{{URL}}/login' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -35,7 +35,7 @@ curl --location --globoff '{{URL}}/login' \
     "email": "521@mail.ru"
 }'
 
-## Как запустить локально на своей машине?
+### Как запустить локально на своей машине?
 1. Скопируйте репозиторий на свою машину
 2. Скачаейте необходимые библиотеки командой pip3 install -r requirements.txt
 3. Запустите сервер python3 app.py
