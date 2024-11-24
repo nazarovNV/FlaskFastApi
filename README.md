@@ -8,7 +8,7 @@
 curl --location --globoff '{{URL}}/products' \
 --header 'Authorization: {{access_token}}' \
 --data ''
-# Добавление товаров
+# Добавление товаров (нужен jwt токен)
 curl --location --globoff '{{URL}}/products' \
 --header 'Authorization: {{access_token}}' \
 --header 'Content-Type: application/json' \
